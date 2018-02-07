@@ -57,22 +57,22 @@ func printboard(board [][]bool) {
 	}
 }
 
-func solve(board [][]bool, row int) bool {
+func solve(board [][]bool, row int) int {
 	n := len(board)
 	if row == n {
 		printboard(board)
 		fmt.Println()
-		return true
+		return 1
 	}
-	found := false
+	ns := 0
 	for col := 0; col < n; col++ {
 		board[row][col] = true
-		if checkboard(board) && solve(board, row+1) {
-			found = true
+		if checkboard(board) {
+			ns += solve(board, row+1)
 		}
 		board[row][col] = false
 	}
-	return found
+	return ns
 }
 
 func nqueen(n int) {
@@ -80,8 +80,11 @@ func nqueen(n int) {
 	for i := range board {
 		board[i] = make([]bool, n)
 	}
-	if !solve(board, 0) {
-		fmt.Println("no solutions found")
+	ns := solve(board, 0)
+	if ns == 1 {
+		fmt.Println(ns, "solution found")
+	} else {
+		fmt.Println(ns, "solutions found")
 	}
 }
 
